@@ -1,0 +1,42 @@
+# TinyMVC Apache settings
+# .htaccess v1.0.0 5/29/2009
+
+# Hide the following from the world
+<FilesMatch "\.(htaccess|htpasswd|ini|php|log|sh|sql)$">
+ Order Allow,Deny
+ Deny from all
+</FilesMatch>
+
+# Allow the index file though..
+<filesMatch "index\.php$">
+allow from All
+</filesMatch>
+
+# Deny Folder Indexes.
+Options -Indexes
+Options +FollowSymLinks
+
+# Set the default file for indexes
+DirectoryIndex index.php index.html 
+
+<IfModule mod_rewrite.c>
+    # mod_rewrite rules
+    RewriteEngine on
+
+    # The RewriteBase of the system (change if you are using this sytem in a sub-folder).
+    RewriteBase /tiny/
+
+	# If the file is NOT the index.php file
+    # RewriteCond %{REQUEST_FILENAME} !index.php
+    # Hide all PHP files so none can be accessed by HTTP
+    # RewriteRule (.*)\.php$ index.php/$1
+	
+	# If the file/dir is not real
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.*)$ index.php/$1 [QSA,L]
+	
+    # You can also uncomment this if you know the IP:
+    # Deny from 192.168.1.1
+
+</IfModule>
